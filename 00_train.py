@@ -55,6 +55,9 @@ class visualizer(object):
 
         return   : None
         """
+        # 绘制模型 训练次数-损失 的图像
+        # 图像被保存在 /model/history_xxx.png 中
+        # scipy 使用 matplotlib 进行绘制
         ax = self.fig.add_subplot(1, 1, 1)
         ax.cla()
         ax.plot(loss)
