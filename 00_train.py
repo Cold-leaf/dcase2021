@@ -29,6 +29,7 @@ import keras_model
 ########################################################################
 # load parameter.yaml
 ########################################################################
+# 将 baseline.yaml 配置文件中的配置加载到 param 变量中
 param = com.yaml_load()
 ########################################################################
 
@@ -174,7 +175,9 @@ if __name__ == "__main__":
                                                 section_name="*",
                                                 dir_name="train",
                                                 mode=mode)
-
+        # param 里装有 baseline.yaml 中的配置参数
+        # 下面则是使用这些配置参数作为函数的输入参数, 如:
+        # param["feature"]["n_mels"] 取得 feature 对象中 n_mels 的值
         data = file_list_to_data(files,
                                  msg="generate train_dataset",
                                  n_mels=param["feature"]["n_mels"],
@@ -194,6 +197,7 @@ if __name__ == "__main__":
 
         model.summary()
 
+        # 此处使用 yaml 配置文件中的 fit 对象里的值
         history = model.fit(x=data,
                             y=data,
                             epochs=param["fit"]["epochs"],
