@@ -12,12 +12,14 @@ import gc  # 垃圾回收 garbage collector
 ########################################################################
 import numpy as np
 import scipy.stats
+
 # from import
-from tqdm import tqdm
+from tqdm import tqdm  # 用于显示控制台中的进度条
 try:
     from sklearn.externals import joblib
 except:
     import joblib
+    
 # original lib
 import common as com
 import keras_model
