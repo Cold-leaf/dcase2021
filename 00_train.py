@@ -222,5 +222,6 @@ if __name__ == "__main__":
         del data
         del model
         keras_model.clear_session()
+        
+        # 垃圾回收
         gc.collect()
-# 添加测试注释
