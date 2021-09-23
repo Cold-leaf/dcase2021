@@ -6,6 +6,8 @@ import keras.models
 from keras import backend as K
 from keras.layers import Input, Dense, BatchNormalization, Activation
 from keras.models import Model
+import tensorflow as tf
+
 
 
 ########################################################################
@@ -62,7 +64,6 @@ def get_model(input_dim, lr):
 
     # model.compile(optimizer=keras.optimizers.Adam(lr=lr), 
     #               loss='mean_squared_error')
-    import tensorflow as tf
     model.compile(optimizer=tf.keras.optimizers.Adam(lr=lr), 
                   loss='mean_squared_error')
 

@@ -87,11 +87,12 @@ def yaml_load():
 # wav file input
 def file_load(wav_name, mono=False):
     """
-    load .wav file.
+    加载 .wav 音频文件
 
     wav_name : str
-        target .wav file
+        目标音频文件
     mono : boolean
+        mono 为真时, 多声道的音频会被合并成单声道
         When load a multi channels file and this param True, the returned data will be merged for mono data
 
     return : numpy.array( float )
@@ -115,6 +116,8 @@ def file_to_vectors(file_name,
                     hop_length=512,
                     power=2.0):
     """
+    将 file_name 转换为 vector 数组
+
     convert file_name to a vector array.
 
     file_name : str
@@ -127,7 +130,7 @@ def file_to_vectors(file_name,
     # calculate the number of dimensions
     dims = n_mels * n_frames
 
-    # generate melspectrogram using librosa
+    # 使用 librosa 生成 mel 频谱
     y, sr = file_load(file_name, mono=True)
     mel_spectrogram = librosa.feature.melspectrogram(y=y,
                                                      sr=sr,
@@ -137,6 +140,10 @@ def file_to_vectors(file_name,
                                                      power=power)
 
     # convert melspectrogram to log mel energies
+    # 将 mel 频谱转化为对数标度
+    # sys.float_info.epsilon 为 python 浮点数的最小差值
+    # np.maximun 在此将 mel_spectrogram 中小于 epsilon 的值截断
+    # 处理得到的数组逐元素取对数, 乘以 20 / power 就得到对数标度下的 mel 频谱
     log_mel_spectrogram = 20.0 / power * np.log10(np.maximum(mel_spectrogram, sys.float_info.epsilon))
 
     # calculate total vector size
