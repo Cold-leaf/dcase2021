@@ -27,10 +27,10 @@ Standard output is logged in "baseline.log".
 """
 import logging
 
-logging.basicConfig(level=logging.DEBUG, filename="baseline.log")
+logging.basicConfig(level=logging.DEBUG, filename="baseline.log")       #输出日志等级、输出文件名
 logger = logging.getLogger(' ')
-handler = logging.StreamHandler()
-formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
+handler = logging.StreamHandler()               #流handler  能够将日志信息输出到sys.stdout, sys.stderr 或者类文件对象
+formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')      #日期格式
 handler.setFormatter(formatter)
 logger.addHandler(handler)
 
@@ -46,14 +46,14 @@ __versions__ = "1.0.0"
 
 
 ########################################################################
-# argparse
+# argparse      命令行选项、参数和子命令解析器
 ########################################################################
 def command_line_chk():
-    parser = argparse.ArgumentParser(description='Without option argument, it will not run properly.')
-    parser.add_argument('-v', '--version', action='store_true', help="show application version")
+    parser = argparse.ArgumentParser(description='Without option argument, it will not run properly.')      #创建解析器 description是在参数帮助文档之前显示的文本
+    parser.add_argument('-v', '--version', action='store_true', help="show application version")            #添加参数(action - 当参数在命令行中出现时使用的动作基本类型; help - 一个此选项作用的简单描述)
     parser.add_argument('-d', '--dev', action='store_true', help="run mode Development")
     parser.add_argument('-e', '--eval', action='store_true', help="run mode Evaluation")
-    args = parser.parse_args()
+    args = parser.parse_args()              #解析参数 
     if args.version:
         print("===============================")
         print("DCASE 2021 task 2 baseline\nversion {}".format(__versions__))
@@ -71,7 +71,7 @@ def command_line_chk():
 
 
 ########################################################################
-# load parameter.yaml
+# load parameter.yaml       加载baseline.yaml（包含各参数）
 ########################################################################
 def yaml_load():
     with open("baseline.yaml") as stream:
@@ -84,7 +84,7 @@ def yaml_load():
 ########################################################################
 # file I/O
 ########################################################################
-# wav file input
+# wav file input    加载音频（wav）为numpy，返回numpy和sr（采样率）
 def file_load(wav_name, mono=False):
     """
     加载 .wav 音频文件
@@ -98,7 +98,7 @@ def file_load(wav_name, mono=False):
     return : numpy.array( float )
     """
     try:
-        return librosa.load(wav_name, sr=None, mono=mono)
+        return librosa.load(wav_name, sr=None, mono=mono)           #path、采样率、通道（false：双通道）
     except:
         logger.error("file_broken or not exists!! : {}".format(wav_name))
 
@@ -132,7 +132,7 @@ def file_to_vectors(file_name,
 
     # 使用 librosa 生成 mel 频谱
     y, sr = file_load(file_name, mono=True)
-    mel_spectrogram = librosa.feature.melspectrogram(y=y,
+    mel_spectrogram = librosa.feature.melspectrogram(y=y,           #mel频谱
                                                      sr=sr,
                                                      n_fft=n_fft,
                                                      hop_length=hop_length,
