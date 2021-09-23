@@ -17,6 +17,7 @@ feature:
 
 fit:
   lr: 0.001
+  # 这里为了加快训练速度, 将 epochs 改为了 10, 原训练次数为 100 次
   # epochs: 100
   epochs: 10
   batch_size: 512
