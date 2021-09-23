@@ -11,10 +11,10 @@ import re
 
 # additional
 import numpy as np
-import librosa
+import librosa  # 音频处理
 import librosa.core
 import librosa.feature
-import yaml
+import yaml  # yaml 专门用来写配置文件
 
 ########################################################################
 
