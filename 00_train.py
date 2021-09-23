@@ -44,8 +44,8 @@ class visualizer(object):
     def __init__(self):
         import matplotlib.pyplot as plt
         self.plt = plt
-        self.fig = self.plt.figure(figsize=(7, 5))
-        self.plt.subplots_adjust(wspace=0.3, hspace=0.3)
+        self.fig = self.plt.figure(figsize=(7, 5))          #自定义图像  参数-宽、高
+        self.plt.subplots_adjust(wspace=0.3, hspace=0.3)    #子图   参数-左右间距、上下间距
 
     def loss_plot(self, loss, val_loss):
         """
@@ -59,16 +59,16 @@ class visualizer(object):
         return   : None
         """
         
-        ax = self.fig.add_subplot(1, 1, 1)
-        ax.cla()
-        ax.plot(loss)
-        ax.plot(val_loss)
+        ax = self.fig.add_subplot(1, 1, 1)  #添加子图  行、列、当前index
+        ax.cla()                            #清除当前图形（子图）中的轴
+        ax.plot(loss)                      
+        ax.plot(val_loss)                   
         ax.set_title("Model loss")
         ax.set_xlabel("Epoch")
         ax.set_ylabel("Loss")
-        ax.legend(["Train", "Validation"], loc="upper right")
+        ax.legend(["Train", "Validation"], loc="upper right")       #训练和验证折线联合到一张图并添加图例，位置为upper right
 
-    def save_figure(self, name):
+    def save_figure(self, name):            #保存图像
         """
         Save figure.
 
@@ -89,41 +89,41 @@ class visualizer(object):
 def file_list_to_data(file_list,
                       msg="calc...",
                       n_mels=64,
-                      n_frames=5,
+                      n_frames=5,           #帧
                       n_hop_frames=1,
-                      n_fft=1024,
-                      hop_length=512,
+                      n_fft=1024,           #窗口大小
+                      hop_length=512,       #帧移
                       power=2.0):
     """
     convert the file_list to a vector array.
     file_to_vector_array() is iterated, and the output vector array is concatenated.
 
     file_list : list [ str ]
-        .wav filename list of dataset
+        .wav filename list of dataset 音频文件
     msg : str ( default = "calc..." )
-        description for tqdm.
+        description for tqdm.           进度条前缀
         this parameter will be input into "desc" param at tqdm.
 
-    return : numpy.array( numpy.array( float ) )
+    return : numpy.array( numpy.array( float ) )        np数组
         data for training (this function is not used for test.)
         * dataset.shape = (number of feature vectors, dimensions of feature vectors)
     """
-    # calculate the number of dimensions
+    # calculate the number of dimensions  维度（data的列数）
     dims = n_mels * n_frames
 
     # iterate file_to_vector_array()
-    for idx in tqdm(range(len(file_list)), desc=msg):
+    for idx in tqdm(range(len(file_list)), desc=msg):       #tqdm形成一个进度条，以desc（msg）为前缀 
         vectors = com.file_to_vectors(file_list[idx],
                                                 n_mels=n_mels,
                                                 n_frames=n_frames,
                                                 n_fft=n_fft,
                                                 hop_length=hop_length,
                                                 power=power)
-        vectors = vectors[: : n_hop_frames, :]
+        vectors = vectors[: : n_hop_frames, :]              #切片（分别行切、列切）
         if idx == 0:
             data = np.zeros((len(file_list) * vectors.shape[0], dims), float)
         data[vectors.shape[0] * idx : vectors.shape[0] * (idx + 1), :] = vectors
-
+        #相当于每隔n_hop_frames行存入data
     return data
 
 
@@ -141,10 +141,10 @@ if __name__ == "__main__":
     if mode is None:
         sys.exit(-1)
         
-    # make output directory
-    os.makedirs(param["model_directory"], exist_ok=True)
+    # make output directory 创建多层输出目录
+    os.makedirs(param["model_directory"], exist_ok=True)    #名字   是否触发存在异常（不触发）
 
-    # initialize the visualizer
+    # initialize the visualizer     画图对象
     visualizer = visualizer()
 
     # load base_directory list
